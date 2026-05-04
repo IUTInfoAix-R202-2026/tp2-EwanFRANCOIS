@@ -46,11 +46,18 @@ public class ProprieteSimple {
     // 1. Instancier anIntProperty avec new SimpleIntegerProperty() si elle
     //    est null. Sinon, ne rien faire (elle a déjà été créée par setAnInt).
     //
+    if (anIntProperty == null) {
+      anIntProperty = new SimpleIntegerProperty();
+    }
     // 2. Afficher sur System.out :
     //    - une ligne vide
     //    - "anIntProperty = " + anIntProperty (appelle toString())
     //    - "anIntProperty.get() = " + anIntProperty.get()
     //    - "anIntProperty.getValue() = " + anIntProperty.getValue()
+    System.out.println("\n");
+    System.out.println("anIntProperty = " + anIntProperty);
+    System.out.println("anIntProperty.get() = " + anIntProperty.get());
+    System.out.println("anIntProperty.getValue() = " + anIntProperty.getValue());
   }
 
   /**
@@ -80,25 +87,40 @@ public class ProprieteSimple {
     //
     // 1. Afficher une ligne vide puis "Add invalidation listener."
     //
+    System.out.println("\n");
+    System.out.println("Add invalidation listener.");
     // 2. Créer un InvalidationListener qui affiche
     //    "The observable has been invalidated." et le stocker dans
     //    le champ this.invalidationListener.
     //
+    this.invalidationListener =
+        (observable -> System.out.println("The observable has been invalidated."));
     // 3. Ajouter le listener à anIntProperty via addListener().
     //
+    anIntProperty.addListener(this.invalidationListener);
     // 4. Afficher "setValue() with 1024." puis appeler setValue(1024).
     //    -> Le listener ne se déclenche PAS (même valeur).
     //
+    System.out.println("setValue() with 1024.");
+    anIntProperty.setValue(1024);
     // 5. Afficher "set() with 2105." puis appeler set(2105).
     //    -> Le listener se déclenche.
     //
+    System.out.println("set() with 2105.");
+    anIntProperty.setValue(2105);
     // 6. Afficher "setValue() with 5012." puis appeler setValue(5012).
     //    -> Le listener ne se redéclenche PAS (paresseux : pas de get() entre-temps).
     //
+    System.out.println("setValue() with 5012.");
+    anIntProperty.setValue(5012);
     // 7. Afficher "Remove invalidation listener." et retirer le listener.
     //
+    System.out.println("Remove invalidation listener.");
+    anIntProperty.removeListener(this.invalidationListener);
     // 8. Afficher "set() with 1024." puis appeler set(1024).
     //    -> Rien ne se passe (listener retiré).
+    System.out.println("set() with 1024.");
+    anIntProperty.set(1024);
   }
 
   /**
@@ -125,26 +147,46 @@ public class ProprieteSimple {
     //
     // 1. Afficher une ligne vide puis "Add change listener."
     //
+    System.out.println("\n");
+    System.out.println("Add change listener.");
     // 2. Créer un ChangeListener<Number> qui affiche
     //    "The observableValue has changed: oldValue = X, newValue = Y"
     //    et le stocker dans this.changeListener.
     //
+    this.changeListener =
+        (observable, oldValue, newValue) ->
+            System.out.println(
+                "The observableValue has changed: oldValue = "
+                    + oldValue
+                    + ", newValue = "
+                    + newValue);
     // 3. Ajouter le listener à anIntProperty.
     //
+    anIntProperty.addListener(this.changeListener);
     // 4. Afficher "setValue() with 1024." puis appeler setValue(1024).
     //    -> Pas de déclenchement (même valeur).
     //
+    System.out.println("setValue() with 1024.");
+    anIntProperty.setValue(1024);
     // 5. Afficher "set() with 2105." puis appeler set(2105).
     //    -> Le listener se déclenche avec oldValue=1024, newValue=2105.
     //
+    System.out.println("set() with 2105.");
+    anIntProperty.set(2105);
     // 6. Afficher "setValue() with 5012." puis appeler setValue(5012).
     //    -> Le listener se déclenche avec oldValue=2105, newValue=5012.
     //    (Contrairement à l'InvalidationListener, il se déclenche à chaque changement.)
     //
+    System.out.println("setValue() with 5012.");
+    anIntProperty.setValue(5012);
     // 7. Afficher "Remove change listener." et retirer le listener.
     //
+    System.out.println("Remove change listener.");
+    anIntProperty.removeListener(this.changeListener);
     // 8. Afficher "set() with 1024." puis appeler set(1024).
     //    -> Rien (listener retiré).
+    System.out.println("set() with 1024.");
+    anIntProperty.set(1024);
   }
 
   public int getAnInt() {
