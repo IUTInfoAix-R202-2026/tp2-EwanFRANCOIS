@@ -1,7 +1,12 @@
 package fr.univ_amu.iut.exercice3;
 
 import javafx.application.Application;
+import javafx.beans.binding.Bindings;
+import javafx.beans.binding.StringExpression;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
@@ -40,18 +45,39 @@ public class PaletteReactive extends Application {
     //
     // 1. Créer un BorderPane comme racine.
     //
+    BorderPane squelette = new BorderPane();
     // 2. Top : un HBox avec trois BoutonCouleur :
-    //    - new BoutonCouleur("Rouge", "red")   id: "btn-rouge"
-    //    - new BoutonCouleur("Vert", "green")   id: "btn-vert"
-    //    - new BoutonCouleur("Bleu", "blue")    id: "btn-bleu"
+    // - new BoutonCouleur("Rouge", "red") id: "btn-rouge"
+    // - new BoutonCouleur("Vert", "green") id: "btn-vert"
+    // - new BoutonCouleur("Bleu", "blue") id: "btn-bleu"
     //
+    BoutonCouleur btnRouge = new BoutonCouleur("Rouge", "red");
+    BoutonCouleur btnVert = new BoutonCouleur("Vert", "green");
+    BoutonCouleur btnBleu = new BoutonCouleur("Bleu", "blue");
+    btnRouge.setId("btn-rouge");
+    btnVert.setId("btn-vert");
+    btnBleu.setId("btn-bleu");
+    HBox hBox = new HBox(10, btnRouge, btnVert, btnBleu);
+    squelette.setTop(hBox);
     // 3. Center : un Pane avec l'id "zone", taille minimale 300x200.
     //
+    Pane zone = new Pane();
+    zone.setId("zone");
+    zone.setMinWidth(300);
+    zone.setMinHeight(200);
+    squelette.setCenter(zone);
     // 4. Bottom : un Label avec l'id "compteurs".
     //
+    Label label = new Label();
+    label.setId("compteurs");
+    squelette.setBottom(label);
     // 5. Appeler createBindings() pour lier le label et la zone aux boutons.
     //
+    createBindings(btnRouge, btnVert, btnBleu, zone, label);
     // 6. Créer la Scene, l'attacher au Stage, afficher.
+    Scene scene = new Scene(squelette);
+    primaryStage.setScene(scene);
+    primaryStage.show();
   }
 
   /**
@@ -70,22 +96,53 @@ public class PaletteReactive extends Application {
     // TODO exercice 3 : créer les bindings.
     //
     // 1. Pour chaque bouton, ajouter un handler setOnAction (en plus de celui
-    //    du BoutonCouleur) qui change le style de la zone :
-    //    zone.setStyle("-fx-background-color: " + btn.getCouleur() + ";")
-    //    Note : le BoutonCouleur incrémente déjà nbClics dans son propre handler.
-    //    L'ajout d'un 2e handler via addEventHandler(ActionEvent.ACTION, ...) ou
-    //    en encapsulant l'ancien fonctionne aussi, mais le plus simple est
-    //    d'utiliser un ChangeListener sur nbClicsProperty() pour changer la couleur.
+    // du BoutonCouleur) qui change le style de la zone :
+    // zone.setStyle("-fx-background-color: " + btnRouge.getCouleur() + ";")
+    // Note : le BoutonCouleur incrémente déjà nbClics dans son propre handler.
+    // L'ajout d'un 2e handler via addEventHandler(ActionEvent.ACTION, ...) ou
+    // en encapsulant l'ancien fonctionne aussi, mais le plus simple est
+    // d'utiliser un ChangeListener sur nbClicsProperty() pour changer la couleur.
     //
+    btnRouge
+        .nbClicsProperty()
+        .addListener(
+            (observable, oldValue, newValue) ->
+                zone.setStyle("-fx-background-color: " + btnRouge.getCouleur() + ";"));
+
+    btnVert
+        .nbClicsProperty()
+        .addListener(
+            (observable, oldValue, newValue) ->
+                zone.setStyle("-fx-background-color: " + btnVert.getCouleur() + ";"));
+
+    btnBleu
+        .nbClicsProperty()
+        .addListener(
+            (observable, oldValue, newValue) ->
+                zone.setStyle("-fx-background-color: " + btnBleu.getCouleur() + ";"));
     // 2. Créer une StringExpression avec Bindings.concat() :
-    //    "Rouge: " + btnRouge.nbClicsProperty().asString()
-    //    + "  Vert: " + btnVert.nbClicsProperty().asString()
-    //    + "  Bleu: " + btnBleu.nbClicsProperty().asString()
+    // "Rouge: " + btnRouge.nbClicsProperty().asString()
+    // + "  Vert: " + btnVert.nbClicsProperty().asString()
+    // + "  Bleu: " + btnBleu.nbClicsProperty().asString()
     //
+    StringExpression texteCompteurs =
+        Bindings.concat(
+            "Rouge: ", btnRouge.nbClicsProperty().asString(),
+            "  Vert: ", btnVert.nbClicsProperty().asString(),
+            "  Bleu: ", btnBleu.nbClicsProperty().asString());
+
+    var total =
+        Bindings.add(
+            Bindings.add(btnRouge.nbClicsProperty(), btnVert.nbClicsProperty()),
+            btnBleu.nbClicsProperty());
+
+    var texteAvecBienvenue =
+        Bindings.when(total.isEqualTo(0)).then("Bienvenue !").otherwise(texteCompteurs);
     // 3. Lier labelCompteurs.textProperty() à cette expression via bind().
     //
+    labelCompteurs.textProperty().bind(texteAvecBienvenue);
     // 4. (Optionnel) Utiliser Bindings.when() pour afficher "Bienvenue !"
-    //    quand aucun bouton n'a été cliqué, et le texte des compteurs sinon.
+    // quand aucun bouton n'a été cliqué, et le texte des compteurs sinon.
   }
 
   public static void main(String[] args) {
