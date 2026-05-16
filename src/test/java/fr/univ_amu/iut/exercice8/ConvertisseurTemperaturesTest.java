@@ -6,7 +6,6 @@ import static org.assertj.core.api.Assertions.within;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -30,14 +29,14 @@ class ConvertisseurTemperaturesTest {
     new ConvertisseurTemperatures().start(stage);
   }
 
-  @Disabled("Retire cette annotation pour activer le test")
+  // @Disabled("Retire cette annotation pour activer le test")
   @Test
   @Order(1)
   void laFenetreEstVisible(FxRobot robot) {
     assertThat(stage.isShowing()).as("le Stage doit être affiché").isTrue();
   }
 
-  @Disabled("Retire cette annotation pour activer le test")
+  // @Disabled("Retire cette annotation pour activer le test")
   @Test
   @Order(2)
   void leSliderCelsiusExiste(FxRobot robot) {
@@ -46,7 +45,7 @@ class ConvertisseurTemperaturesTest {
     assertThat(s.getMax()).as("le max du slider Celsius doit être 100").isEqualTo(100);
   }
 
-  @Disabled("Retire cette annotation pour activer le test")
+  // @Disabled("Retire cette annotation pour activer le test")
   @Test
   @Order(3)
   void leSliderFahrenheitExiste(FxRobot robot) {
@@ -55,7 +54,7 @@ class ConvertisseurTemperaturesTest {
     assertThat(s.getMax()).as("le max du slider Fahrenheit doit être 212").isEqualTo(212);
   }
 
-  @Disabled("Retire cette annotation pour activer le test")
+  // @Disabled("Retire cette annotation pour activer le test")
   @Test
   @Order(4)
   void lesTextFieldsExistent(FxRobot robot) {
@@ -65,7 +64,7 @@ class ConvertisseurTemperaturesTest {
     assertThat(tfF).as("un TextField avec id 'tf-fahrenheit' doit exister").isNotNull();
   }
 
-  @Disabled("Retire cette annotation pour activer le test")
+  // @Disabled("Retire cette annotation pour activer le test")
   @Test
   @Order(5)
   void valeurInitialeCorrecte(FxRobot robot) {
@@ -79,7 +78,7 @@ class ConvertisseurTemperaturesTest {
         .isCloseTo(32, within(1.0));
   }
 
-  @Disabled("Retire cette annotation pour activer le test")
+  // @Disabled("Retire cette annotation pour activer le test")
   @Test
   @Order(6)
   void deplacerCelsiusMetAJourFahrenheit(FxRobot robot) {
@@ -93,7 +92,7 @@ class ConvertisseurTemperaturesTest {
         .isCloseTo(212, within(1.0));
   }
 
-  @Disabled("Retire cette annotation pour activer le test")
+  // @Disabled("Retire cette annotation pour activer le test")
   @Test
   @Order(7)
   void deplacerFahrenheitMetAJourCelsius(FxRobot robot) {
@@ -107,7 +106,7 @@ class ConvertisseurTemperaturesTest {
         .isCloseTo(100, within(1.0));
   }
 
-  @Disabled("Retire cette annotation pour activer le test")
+  // @Disabled("Retire cette annotation pour activer le test")
   @Test
   @Order(8)
   void textFieldCelsiusSynchroAvecSlider(FxRobot robot) {
@@ -121,7 +120,7 @@ class ConvertisseurTemperaturesTest {
         .contains("50");
   }
 
-  @Disabled("Retire cette annotation pour activer le test")
+  // @Disabled("Retire cette annotation pour activer le test")
   @Test
   @Order(9)
   void conversionCorrecteValeurIntermediaire(FxRobot robot) {
@@ -136,7 +135,7 @@ class ConvertisseurTemperaturesTest {
         .isCloseTo(98.6, within(1.0));
   }
 
-  @Disabled("Retire cette annotation pour activer le test")
+  // @Disabled("Retire cette annotation pour activer le test")
   @Test
   @Order(10)
   void textFieldFahrenheitSynchroAvecSlider(FxRobot robot) {
@@ -150,7 +149,7 @@ class ConvertisseurTemperaturesTest {
         .contains("100");
   }
 
-  @Disabled("Retire cette annotation pour activer le test")
+  // @Disabled("Retire cette annotation pour activer le test")
   @Test
   @Order(11)
   void conversionAllerRetour(FxRobot robot) {
